@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>PhoneGap</title>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+	<script type="text/javascript">
+
+	var __fileId;
+	var __fileLength;
+	var __pieceSize;
+
+	window.onload=function(){
+       var sendTextId = document.getElementById('sendText');
+       sendTextId.onclick=function(){
+       	 var uid = document.getElementById('uid').value;
+         var text = document.getElementById('text').value;
+         var json = {"userID" : uid, "content" : text};
+         YouYunIMPlugin.sendText(onMessageSuccess,onMessageError, json);
+      }
+
+       var listenerId = document.getElementById('listener');
+       listenerId.onclick=function(){
+         YouYunIMPlugin.setReceiveMsgListener(onMessageListener,onMessageError);
+      }
+
+      var sendImageId = document.getElementById('sendImage');
+       sendImageId.onclick=function(){
+       	 var uid = document.getElementById('uid').value;
+         var json = {"userID" : uid, "filePath" : "/sdcard/aaa.png", "nailPath" : "Youyun_SendImg_Test"};
+         YouYunIMPlugin.sendPic(onMessageSuccess,onMessageError, json);
+      }
+
+      var showBigImgId = document.getElementById('showBigImg');
+         showBigImgId.onclick=function(){
+         var json = {"fileID" : __fileId, "length" : __fileLength, "pieceSize" : __pieceSize, "filePath" : "/sdcard/bigimg.png"};
+         YouYunIMPlugin.getFile(onMessageSuccess,onMessageError, json);
+      }
+	}
+
+	function onMessageListener(result){
+		switch(result.result.type){
+				case 1:
+					var receiveId = document.getElementById('receiveId');
+					var receiveText = document.getElementById('receiveText');
+					var receiveTime = document.getElementById('receiveTime');
+					receiveId.innerText = result.result.fromUID;
+					receiveText.innerText = result.result.content;
+					receiveTime.innerText = result.result.timeValue;
+					break;
+				case 2:
+					var thumbmailData = result.result.thumbnailData;
+	 				__fileId = result.result.fileID;
+	 				__fileLength = result.result.length;
+	 				__pieceSize = result.result.size;
+	 				var smallImage = document.getElementById('thumbnailImg');
+        			smallImage.style.display = 'block';
+        			//在使用base64编码的时候需要使用这样的前缀
+       	 			smallImage.src = "data:image/jpeg;base64," + thumbmailData;
+					break;
+				case 5:
+				case 6:
+					var downloadpro = document.getElementById('downloadpro');
+					downloadpro.innerText = result.result.progress;
+					break;
+		}
+
+　　}
+
+	function onMessageSuccess(result){
+　　    alert("发送消息成功：>  "+result);
+　　}
+　　function onMessageError(result){
+　　    alert("发送失败:(  "+result);
+　　}
+
+	function receiveMessageThread(result){
+		var obj = JSON.parse(result);
+		if('receiveText' == obj.msgType){
+			var receiveId = document.getElementById('receiveId');
+			var receiveText = document.getElementById('receiveText');
+			var receiveTime = document.getElementById('receiveTime');
+			receiveId.innerText = obj.fromuid;
+			receiveText.innerText = obj.content;
+			receiveTime.innerText = obj.time;
+		}else if('receiveImage' == obj.msgType){
+	 		var thumbmailData = obj.thumbData;
+	 		__fileId = obj.fileId;
+	 		__fileLength = obj.fileLength;
+	 		__pieceSize = obj.pieceSize;
+	 		var smallImage = document.getElementById('thumbnailImg');
+        	smallImage.style.display = 'block';
+        	//在使用base64编码的时候需要使用这样的前缀
+       	 	smallImage.src = "data:image/jpeg;base64," + thumbmailData;
+		}else if('uploadProgress' == obj.msgType){
+			var uploadpro = document.getElementById('uploadpro');
+			uploadpro.innerText = obj.progress;
+		}else if('downloadProgress' == obj.msgType){
+			var downloadpro = document.getElementById('downloadpro');
+			downloadpro.innerText = obj.progress;
+		}
+	}
+
+
+</script>
+
+</head>
+<body style="text-align:center">
+<span>uid：</span>&nbsp;
+<input type="text" id="uid">
+<br>
+<span>text：</span>
+<input type="text" id="text">
+<br><br>
+<input type="button" value="Send" id="sendText"/>
+<input type="button" value="Register Listener" id="listener"/>
+<br><br><br>
+<span>发送人：</span>
+<span id="receiveId"></span>
+<br>
+<span>内容：</span>
+<span id="receiveText"></span>
+<br>
+<span>时间：</span>
+<span id="receiveTime"></span>
+
+<br><br>
+<span id="uploadpro"></span>
+<input type="button" value="Send Image" id="sendImage"/>
+<br><br>
+<span id="downloadpro"></span>
+<input type="button" value="Download Image" id="showBigImg"/>
+<br><br>
+<img src="" id="thumbnailImg" width="150px" height="150px">
+</body>
+</html>

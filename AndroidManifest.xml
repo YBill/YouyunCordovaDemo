@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.youyun.cordova"
+    android:hardwareAccelerated="true"
+    android:versionCode="1"
+    android:versionName="0.0.1">
+
+    <application
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        <activity
+            android:name="MainActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/activity_name"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter android:label="@string/launcher_name">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="CLIENT_ID"
+            android:value="1-20082-3e1632fba5606ffd129dd9d08b8df64a-android" />
+        <meta-data
+            android:name="SECRET"
+            android:value="c5bcda37516e2c8dbd41baa2df74821c" />
+
+        <service android:name="matrix.sdk.countly.OpenUDID_service">
+            <intent-filter>
+                <action android:name="org.OpenUDID.GETUDID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.weimi.push.service.WeimiPushService"
+            android:exported="true"
+            android:process=":push">
+            <intent-filter>
+                <action android:name="me.weimi.PushService.BIND" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="cn.youyun.cordova.YouyunPushReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="me.weimi.push.action.20082" />
+            </intent-filter>
+        </receiver>
+    </application>
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+</manifest>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PhoneGap</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+    <script type="text/javascript">
+	window.onload=function(){
+  		var loginId = document.getElementById('login');
+  		loginId.onclick=function(){
+      		YouYunIMPlugin.login(onLoginSuccess,onLoginError);
+  		}
+  		var logoutId = document.getElementById('logout');
+  		logoutId.onclick=function(){
+      		YouYunIMPlugin.logout(onLogoutSuccess,onLogoutError);
+  		}
+	}
+
+	function onLoginSuccess(result){
+	    if(result.status == 1){
+	        alert(result.result.id);
+	    	window.location.href='file:///android_asset/www/temp.html';
+	    }else{
+	    	alert(result.msg);
+	    }
+　　
+　　}
+　　function onLoginError(result){
+　　    alert("登录失败");
+　　}
+
+    function onLogoutSuccess(result){
+	    if(result.status == 1){
+	        alert("登出成功");
+	    }else{
+	    	alert(result.msg);
+	    }
+　　
+　　}
+　　function onLogoutError(result){
+　　    alert("登出失败:" + result);
+　　}
+	
+
+    </script>
+
+</head>
+<body style="text-align:center">
+<br><br><br>
+<input type="button" value="Login" id="login"/>
+<br><br><br>
+<input type="button" value="Logout" id="logout"/>
+</body>
+</html>
